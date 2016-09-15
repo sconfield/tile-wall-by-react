@@ -27,7 +27,8 @@ export default AppComponent;
 const BOX_HEIGHT = document.body.clientHeight,
       BOX_WIDTH = document.body.clientWidth,
       TILE_HEIGHT = 130,
-      TILE_WIDTH = 260;
+      TILE_WIDTH = 260,
+      BROWSER_TYPE = ['Webkit', 'Moz', 'Ms'];
 
 const Tile = React.createClass({
   getInitialState: function() {
@@ -57,8 +58,8 @@ const Tile = React.createClass({
           title={this.props.data.name}
           subtitle={this.props.data.title}
           avatar={yeomanImage}
-          actAsExpander={true}
-          showExpandableButton={true} />
+          actAsExpander={false}
+          showExpandableButton={false} />
         <CardText>
           <Toggle
             toggled={this.state.expanded}
@@ -126,11 +127,15 @@ const TileBox = React.createClass({
     }
 
     idx = idx ? idx : 999;
-    return {
+    let here = {
       top: any_y - TILE_HEIGHT/2 + 'px',
       left: any_x - TILE_WIDTH/2 + 'px',
       zIndex: idx,
       transform: rotate
     };
+    for (var i = 0; i < BROWSER_TYPE.length; i++) {
+      here[BROWSER_TYPE[i]+'Transform'] = rotate;
+    }
+    return here;
   }
 });
