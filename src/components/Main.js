@@ -96,10 +96,12 @@ const TileBox = React.createClass({
   },
   getAnyWhere: function(idx){
     let any_x = BOX_WIDTH/2,
-        any_y = BOX_HEIGHT/2;
+        any_y = BOX_HEIGHT/2,
+        rotate = 'rotate(0deg)';
     const any = Math.random();
 
     if (idx) {
+      rotate = 'rotate(' + Math.random()*360 + 'deg)';
       switch (idx%4) {
         case 0:
           any_x = BOX_WIDTH/2 * any;
@@ -127,7 +129,8 @@ const TileBox = React.createClass({
     return {
       top: any_y - TILE_HEIGHT/2 + 'px',
       left: any_x - TILE_WIDTH/2 + 'px',
-      zIndex: idx
+      zIndex: idx,
+      transform: rotate
     };
   }
 });
