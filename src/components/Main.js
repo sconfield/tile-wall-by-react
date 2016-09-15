@@ -33,7 +33,8 @@ const BOX_HEIGHT = document.body.clientHeight,
 const Tile = React.createClass({
   getInitialState: function() {
     return {
-      expanded: false
+      expanded: true,
+      isFront: true
     };
   },
   handleExpandChange: function(expanded) {
@@ -45,12 +46,12 @@ const Tile = React.createClass({
   handleExpand: function() {
     this.setState({expanded: true});
   },
-  handleReduce: function() {
-    this.setState({expanded: false});
+  handleTurn: function(){
+    this.setState({isFront: !this.state.isFront});
   },
   render: function () {
     return (
-      <Card className="card"
+      <Card className="tile" zDepth={3}
         style={this.props.putAnyWhere}
         expanded={this.state.expanded}
         onExpandChange={this.handleExpandChange}>
@@ -67,12 +68,23 @@ const Tile = React.createClass({
             labelPosition="right"
             label="展开详情" />
         </CardText>
-        <CardMedia expandable={true}
+        <CardMedia className="tile-img"
+          expandable={true}
+          onClick={this.handleTurn}
+          style={{'display': this.state.isFront?'block':'none'}}
           overlay={<CardTitle title="豪凸瓷砖" subtitle="www.hao2home.com" />}>
-          <img src={this.props.data.path} />
+          <img src={this.props.data.path} alt={this.props.data.name} />
         </CardMedia>
-        <CardTitle title={'编号: '+this.props.data.code} subtitle={this.props.data.type} expandable={true} />
-        <CardText expandable={true}>
+        <CardTitle className="tile-title"
+          style={{'display': !this.state.isFront?'block':'none'}}
+          onClick={this.handleTurn}
+          title={'编号: '+this.props.data.code}
+          subtitle={this.props.data.type}
+          expandable={true} />
+        <CardText className="tile-desc"
+          expandable={true}
+          onClick={this.handleTurn}
+          style={{'display': !this.state.isFront?'block':'none'}}>
           {this.props.data.desc}
         </CardText>
       </Card>
@@ -90,7 +102,7 @@ const TileBox = React.createClass({
       );
     };
     return (
-      <div className="card-box">
+      <div className="tile-box">
         {imgData.map(createTile)}
       </div>
     );
