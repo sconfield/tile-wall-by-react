@@ -95,33 +95,39 @@ const TileBox = React.createClass({
     );
   },
   getAnyWhere: function(idx){
-    let any_x, any_y = 0;
+    let any_x = BOX_WIDTH/2,
+        any_y = BOX_HEIGHT/2;
     const any = Math.random();
-    switch (idx%4) {
-      case 0:
-        any_x = BOX_WIDTH/2 * any;
-        any_y = BOX_HEIGHT/2 * any;
-        break;
-      case 1:
-        any_x = BOX_WIDTH/2 * (1+any);
-        any_y = BOX_HEIGHT/2 * any;
-        break;
-      case 2:
-        any_x = BOX_WIDTH/4 * (3+any);
-        any_y = BOX_HEIGHT/2 * (1+any);
-        break;
-      case 3:
-        any_x = BOX_WIDTH/4 * any;
-        any_y = BOX_HEIGHT/2 * (1+any);
-        break;
-      default:
-        any_x += 'px';
-        any_y += 'px';
+
+    if (idx) {
+      switch (idx%4) {
+        case 0:
+          any_x = BOX_WIDTH/2 * any;
+          any_y = BOX_HEIGHT/2 * any;
+          break;
+        case 1:
+          any_x = BOX_WIDTH/2 * (1+any);
+          any_y = BOX_HEIGHT/2 * any;
+          break;
+        case 2:
+          any_x = BOX_WIDTH/4 * (3+any);
+          any_y = BOX_HEIGHT/2 * (1+any);
+          break;
+        case 3:
+          any_x = BOX_WIDTH/4 * any;
+          any_y = BOX_HEIGHT/2 * (1+any);
+          break;
+        default:
+          any_x += 'px';
+          any_y += 'px';
+      }
     }
 
+    idx = idx ? idx : 999;
     return {
       top: any_y - TILE_HEIGHT/2 + 'px',
-      left: any_x - TILE_WIDTH/2 + 'px'
+      left: any_x - TILE_WIDTH/2 + 'px',
+      zIndex: idx
     };
   }
 });
