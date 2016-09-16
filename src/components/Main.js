@@ -1,8 +1,8 @@
-require('normalize.css/normalize.css');
-
 import React from 'react';
 import {Card, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import Toggle from 'material-ui/Toggle';
+import IconButton from 'material-ui/IconButton';
+import ActionHome from 'material-ui/svg-icons/maps/person-pin-circle';
 import '../styles/main.styl';
 
 import imgData from '../stores/Tile.json';
@@ -26,7 +26,7 @@ export default AppComponent;
 
 const BOX_HEIGHT = document.body.clientHeight,
       BOX_WIDTH = document.body.clientWidth,
-      TILE_HEIGHT = 130,
+      TILE_HEIGHT = 485,
       TILE_WIDTH = 260,
       BROWSER_TYPE = ['Webkit', 'Moz', 'Ms'];
 
@@ -51,7 +51,7 @@ const Tile = React.createClass({
   },
   render: function () {
     return (
-      <Card className="tile" zDepth={3}
+      <Card className="tile" zDepth={5}
         style={this.props.putAnyWhere}
         expanded={this.state.expanded}
         onExpandChange={this.handleExpandChange}>
@@ -62,7 +62,7 @@ const Tile = React.createClass({
           actAsExpander={false}
           showExpandableButton={false} />
         <CardText>
-          <Toggle
+          <Toggle disabled={!this.props.isCenter}
             toggled={this.state.expanded}
             onToggle={this.handleToggle}
             labelPosition="right"
@@ -98,12 +98,13 @@ const TileBox = React.createClass({
     const createTile = function(tile, idx){
       const here = self.getAnyWhere(idx);
       return (
-        <Tile key={idx} data={tile} putAnyWhere={here}></Tile>
+        <Tile key={idx} data={tile} putAnyWhere={here} isCenter={!Boolean(idx)}></Tile>
       );
     };
     return (
       <div className="tile-box">
         {imgData.map(createTile)}
+        <TileNavBar></TileNavBar>
       </div>
     );
   },
@@ -149,5 +150,35 @@ const TileBox = React.createClass({
       here[BROWSER_TYPE[i]+'Transform'] = rotate;
     }
     return here;
+  }
+});
+
+const TileNavBar = React.createClass({
+  render: function() {
+    const createTileIcon = function(tile, idx){
+      return (
+        <TileNavIcon key={idx} data={tile}></TileNavIcon>
+      );
+    };
+    return (
+      <div className="tile-nav">
+        {imgData.map(createTileIcon)}
+      </div>
+    );
+  }
+});
+
+const TileNavIcon = React.createClass({
+  putCenter: function(event){
+    event.preventDefault();
+    event.stopPropagation();
+  },
+  render: function() {
+    return (
+      <IconButton tooltip={this.props.data.title}>
+        <ActionHome color="#90A4AE" hoverColor="#37474F"
+          onClick={this.putCenter} />
+      </IconButton>
+    );
   }
 });
